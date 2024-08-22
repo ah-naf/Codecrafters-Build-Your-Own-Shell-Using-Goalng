@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var SHELL_BUILTIN = []string{"echo", "type", "exit"}
+var SHELL_BUILTIN = []string{"echo", "type", "exit", "pwd"}
 
 func main() {
 	for {
@@ -37,6 +37,12 @@ func main() {
 			os.Exit(code)
 		case "echo":
 			fmt.Println(strings.Join(commands[1:], " "))
+		case "pwd":
+			dir, err := os.Getwd()
+			if err != nil {
+				os.Exit(1)
+			}
+			fmt.Println(dir)
 		case "type":
 			command := strings.Join(commands[1:], " ")
 			if slices.Contains(SHELL_BUILTIN, command) {
