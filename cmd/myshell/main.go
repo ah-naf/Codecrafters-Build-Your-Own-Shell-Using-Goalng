@@ -4,9 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
+
+var SHELL_BUILTIN = []string{"echo", "type", "exit"}
 
 func main() {
 	for {
@@ -21,6 +24,7 @@ func main() {
 		}
 		message = strings.TrimSpace(message)
 		commands := strings.Split(message, " ")
+		
 
 		switch commands[0] {
 		case "exit":
@@ -31,6 +35,13 @@ func main() {
 			os.Exit(code)
 		case "echo":
 			fmt.Println(strings.Join(commands[1:], " "))
+		case "type":
+			command := strings.Join(commands[1:], " ")
+			if slices.Contains(SHELL_BUILTIN, command) {
+				fmt.Printf("%s is a shell builtin\n", command)
+			} else {
+				fmt.Printf("%s: not found\n", command)
+			}
 		default:
 			fmt.Printf("%s: command not found\n", commands[0])
 		}
