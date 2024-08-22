@@ -64,6 +64,13 @@ func main() {
 			}
 		case "cd":
 			command := strings.Join(commands[1:], " ")
+			if command == "~" {
+				homeDir, err := os.UserHomeDir()
+				if err != nil {
+					os.Exit(1)
+				}
+				command = homeDir
+			}
 			if err := os.Chdir(command); err != nil {
 				fmt.Printf("%s: %s: No such file or directory\n", commands[0], command)
 			}
