@@ -62,6 +62,11 @@ func main() {
 					fmt.Printf("%s: not found\n", command)
 				}
 			}
+		case "cd":
+			command := strings.Join(commands[1:], " ")
+			if err := os.Chdir(command); err != nil {
+				fmt.Printf("%s: %s: No such file or directory\n", commands[0], command)
+			}
 		default:
 			command := exec.Command(commands[0], strings.Join(commands[1:], " "))
 			command.Stdin = os.Stdin
