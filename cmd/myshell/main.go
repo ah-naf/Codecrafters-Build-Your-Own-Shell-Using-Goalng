@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
 	"strconv"
 	"strings"
@@ -40,7 +41,19 @@ func main() {
 			if slices.Contains(SHELL_BUILTIN, command) {
 				fmt.Printf("%s is a shell builtin\n", command)
 			} else {
-				fmt.Printf("%s: not found\n", command)
+				found := false
+				paths := strings.Split(os.Getenv("PATH"), ":")
+				for _, path := range paths {
+					fp := filepath.Join(path, command)
+					if _, err := os.Stat(fp); err == nil {
+						fmt.Printf("%s is %s\n", command, fp)
+						found = true
+						break
+					}
+				}
+				if !found {
+					fmt.Printf("%s: not found\n", command)
+				}
 			}
 		default:
 			fmt.Printf("%s: command not found\n", commands[0])
